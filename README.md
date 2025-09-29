@@ -1,8 +1,10 @@
-## Notes:
+# Como usar:
 
-This configurations were made for academical purposes only. This is a simple test of OSPF and RIP routing protocols, you can use it with 3 Virtual Machines working as routers.
+Estas configurações foram feitas apenas para fins acadêmicos. Este é um teste simples dos protocolos de roteamento OSPF e RIP, você pode usá-lo com 3 Máquinas Virtuais funcionando como roteadores.
 
-Note: To make it functional, additional configurations might be needed on the VM software, like activating the "Internal Network" and "Promiscuous Mode" configurations, plus adding these scripts on the netplan of each router to set up the basic DHCP and Static IP:
+Nota: Para que funcione, configurações adicionais podem ser necessárias no software da VM, como ativar as configurações de "Rede Interna" e "Modo Promíscuo".
+
+# Configurar netplan de cada roteador para configurar o DHCP básico e o IP Estático:
 
 ## R1:
 
@@ -17,7 +19,7 @@ network:
       addresses: [192.168.12.1/24]
 ``` 
 
-Then, ``sudo netplan apply``.
+Em seguida, ``sudo netplan apply``.
 
 
 ## R2:
@@ -35,7 +37,7 @@ network:
       addresses: [192.168.23.2/24]
 ```
 
-Then, ``sudo netplan apply``.
+Em seguida, ``sudo netplan apply``.
 
 ## R3:
 
@@ -49,4 +51,38 @@ network:
     enp0s8:
       addresses: [192.168.23.3/24]`
 ```
-Then, ``sudo netplan apply``.
+Em seguida, ``sudo netplan apply``.
+
+# Instale o BIRD
+
+``sudo apt-get update``
+
+``sudo apt-get install bird``
+
+# Em cada roteador, substitua o conteúdo dos arquivos bird.config pelos arquivos de configuração OSPF **OU** RIP do repositório:
+
+Você pode editar pelo editor nano com: 
+
+``sudo nano etc/bird/bird.config``
+
+Nota: Em alguns casos, é necessário autorização de superuser para modificar esse arquivo, para isso, use ``sudo su``.
+
+# Comandos para verificar e testar conexão:
+
+``birdc show status``
+
+``birdc show protocols``
+
+``birdc show protocols all rip1``
+
+``birdc show protocols all ospf``
+
+``birdc show route protocol rip1``
+
+``birdc show route protocol ospf``
+
+``birdc show route``
+
+``ping 192.168.xx.xx``
+
+``traceroute 192.168.xx.xx``
